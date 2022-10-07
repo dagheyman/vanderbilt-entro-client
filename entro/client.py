@@ -11,26 +11,23 @@ class EntroClient:
         self.s = requests.Session()
 
     def login(self, username, password):
-        # GET SALT AND SALT PASSWORD
         r = self.s.get(self.url + "/getvalue.cgi")
+        resp_values = self.parse_response(r.text)
+        _type = resp_values[1]
+        salt = resp_values[2]
+        salted_pw = self.get_salted_pw(salt, password)
 
-        values = self.parse_response(r.text)
-        _type = values[1]
-        salt = values[2]
-        password_salted = hashlib.md5((salt + password).encode("utf-8")).hexdigest()
-
-        # LOGIN
         r = self.s.get(
             self.url
             + "/login.cgi?id="
             + username
             + "&data="
-            + password_salted
+            + salted_pw
             + "&type="
             + _type
         )
-        login_response = r.text.split("\t")
-        self.session = login_response[2]
+        resp_values = self.parse_response(r.text)
+        self.session = resp_values[1]
 
     def get_bookings(self):
         r = self.s.get(
@@ -44,6 +41,9 @@ class EntroClient:
         print(r.text)
 
     @staticmethod
+    def get_salted_pw(salt, password):
+        return hashlib.md5((salt + password).encode("utf-8")).hexdigest()
+
+    @staticmethod
     def parse_response(data):
-        values = data.split()
-        return values
+        return data.split()
