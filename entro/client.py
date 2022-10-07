@@ -1,5 +1,14 @@
 import requests
 import hashlib
+from datetime import datetime
+from dataclasses import dataclass
+
+
+@dataclass
+class Booking:
+    title: str
+    start: datetime
+    end: datetime
 
 
 class EntroClient:
@@ -38,7 +47,15 @@ class EntroClient:
             + self.OBJECT_ID
             + "&type=0"
         )
-        print(r.text)
+        resp_values = self.parse_response(r.text)
+
+        return [
+            Booking(
+                title=resp_values[1],
+                start=datetime.utcfromtimestamp(int(resp_values[2])),
+                end=datetime.utcfromtimestamp(int(resp_values[5])),
+            )
+        ]
 
     @staticmethod
     def get_salted_pw(salt, password):
