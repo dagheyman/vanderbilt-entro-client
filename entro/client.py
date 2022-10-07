@@ -13,9 +13,10 @@ class EntroClient:
     def login(self, username, password):
         # GET SALT AND SALT PASSWORD
         r = self.s.get(self.url + "/getvalue.cgi")
-        values = r.text.split("\t")
-        salt = values[3]
-        _type = values[2]
+
+        values = self.parse_response(r.text)
+        _type = values[1]
+        salt = values[2]
         password_salted = hashlib.md5((salt + password).encode("utf-8")).hexdigest()
 
         # LOGIN
@@ -41,3 +42,8 @@ class EntroClient:
             + "&type=0"
         )
         print(r.text)
+
+    @staticmethod
+    def parse_response(data):
+        values = data.split()
+        return values
