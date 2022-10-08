@@ -1,7 +1,8 @@
 import requests
 import hashlib
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from dataclasses import dataclass
+from dateutil.relativedelta import relativedelta
 
 
 @dataclass
@@ -95,7 +96,9 @@ class EntroClient:
 
     @staticmethod
     def date_to_timestamp(date):
-        return int(date.replace(year=2002, tzinfo=timezone.utc).timestamp())
+        return int(
+            (date.replace(tzinfo=timezone.utc) - relativedelta(years=20)).timestamp()
+        )
 
     def _debug(self):
         print("showres.cgi (my bookings)")
