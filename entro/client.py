@@ -61,17 +61,6 @@ class EntroClient:
         # TODO: It's the same API call above, but with type=1
         pass
 
-    # curl 'http://bokning.brfdammen.se:7999/makeres.cgi?session=0&object=1&start=1035028800&stop=1035037800'
-    # datetime to utc timestamp: int(x.replace(tzinfo=timezone.utc).timestamp())
-    # Response codes:
-    #
-    # RESERVATION_OK              0
-    # RESERVATION_ERROR           1
-    # RESERVATION_INTERVAL_FULL   2
-    # RESERVATION_FAMILY_FULL     3
-    # RESERVATION_NO_TIME         4
-    # RESERVATION_PERIOD_FULL     5
-    # RESERVATION_OBJECT_DISABLED 6
     def make_booking(self, start, stop):
         r = self.s.get(
             self.url
@@ -87,8 +76,6 @@ class EntroClient:
         status, resp_valies = self.parse_response(r.text)
         if status != "0":
             raise ValueError(status)
-
-        # TODO: check status code
 
     @staticmethod
     def get_salted_pw(salt, password):
