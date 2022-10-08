@@ -22,9 +22,9 @@ class EntroClient:
 
     def login(self, username, password):
         r = self.s.get(self.url + "/getvalue.cgi")
-        resp_values = self.parse_response(r.text)
-        _type = resp_values[1]
-        salt = resp_values[2]
+        status, resp_values = self.parse_response(r.text)
+        _type = resp_values[0]
+        salt = resp_values[1]
         salted_pw = self.get_salted_pw(salt, password)
 
         r = self.s.get(
@@ -36,8 +36,8 @@ class EntroClient:
             + "&type="
             + _type
         )
-        resp_values = self.parse_response(r.text)
-        self.session = resp_values[1]
+        status, resp_values = self.parse_response(r.text)
+        self.session = resp_values[0]
 
     def get_active_booking(self):
         r = self.s.get(
@@ -49,12 +49,12 @@ class EntroClient:
             + "&type=0"
         )
 
-        resp_values = self.parse_response(r.text)
+        status, resp_values = self.parse_response(r.text)
 
         return Booking(
-            title=resp_values[1],
-            start=datetime.utcfromtimestamp(int(resp_values[2])),
-            end=datetime.utcfromtimestamp(int(resp_values[5])),
+            title=resp_values[0],
+            start=datetime.utcfromtimestamp(int(resp_values[1])),
+            end=datetime.utcfromtimestamp(int(resp_values[4])),
         )
 
     def get_all_bookings():
@@ -92,7 +92,8 @@ class EntroClient:
 
     @staticmethod
     def parse_response(data):
-        return data.split()
+        arr = data.split()
+        return arr[0], arr[1:]
 
     @staticmethod
     def date_to_timestamp(date):
