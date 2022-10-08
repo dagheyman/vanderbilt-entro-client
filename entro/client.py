@@ -80,10 +80,14 @@ class EntroClient:
             + "&object="
             + self.OBJECT_ID
             + "&start="
-            + self.date_to_timestamp(start)
+            + str(self.date_to_timestamp(start))
             + "&stop="
-            + self.date_to_timestamp(stop)
+            + str(self.date_to_timestamp(stop))
         )
+        status, resp_valies = self.parse_response(r.text)
+        if status != "0":
+            raise ValueError(status)
+
         # TODO: check status code
 
     @staticmethod
