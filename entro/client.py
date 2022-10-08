@@ -72,7 +72,7 @@ class EntroClient:
     # RESERVATION_NO_TIME         4
     # RESERVATION_PERIOD_FULL     5
     # RESERVATION_OBJECT_DISABLED 6
-    def make_booking(self, start_timestamp, stop_timestamp):
+    def make_booking(self, start, stop):
         r = self.s.get(
             self.url
             + "/makeres.cgi?session="
@@ -80,9 +80,9 @@ class EntroClient:
             + "&object="
             + self.OBJECT_ID
             + "&start="
-            + start_timestamp
+            + self.date_to_timestamp(start)
             + "&stop="
-            + stop_timestamp
+            + self.date_to_timestamp(stop)
         )
         # TODO: check status code
 
