@@ -71,8 +71,19 @@ class EntroClient:
     # RESERVATION_NO_TIME         4
     # RESERVATION_PERIOD_FULL     5
     # RESERVATION_OBJECT_DISABLED 6
-    def make_booking():
-        pass
+    def make_booking(self, start_timestamp, stop_timestamp):
+        r = self.s.get(
+            self.url
+            + "/makeres.cgi?session="
+            + self.session
+            + "&object="
+            + self.OBJECT_ID
+            + "&start="
+            + start_timestamp
+            + "&stop="
+            + stop_timestamp
+        )
+        # TODO: check status code
 
     @staticmethod
     def get_salted_pw(salt, password):
