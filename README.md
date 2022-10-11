@@ -1,6 +1,6 @@
 # vanderbilt-entro-client
 
-Library for managing bookings in Vanderbilt Entro Reservation system (earlier called Bewator Entro), written in Python.
+Library for managing bookings in Vanderbilt Entro Reservation system (earlier called Bewator Entro).
 
 ## Features
 
