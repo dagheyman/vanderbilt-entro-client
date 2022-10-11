@@ -28,25 +28,14 @@ class EntroClient:
         salted_pw = self.get_salted_pw(salt, password)
 
         r = self.s.get(
-            self.url
-            + "/login.cgi?id="
-            + username
-            + "&data="
-            + salted_pw
-            + "&type="
-            + _type
+            f"{self.url}/login.cgi?id={username}&data={salted_pw}&type={_type}"
         )
         status, resp_values = self.parse_response(r.text)
         self.session = resp_values[0]
 
     def get_active_booking(self):
         r = self.s.get(
-            self.url
-            + "/showres.cgi?session="
-            + self.session
-            + "&object="
-            + self.OBJECT_ID
-            + "&type=0"
+            f"{self.url}/showres.cgi?session={self.session}&object={self.OBJECT_ID}&type=0"
         )
 
         status, resp_values = self.parse_response(r.text)
@@ -62,16 +51,10 @@ class EntroClient:
         pass
 
     def make_booking(self, start, stop):
+        start = self.date_to_timestamp(start)
+        stop = self.date_to_timestamp(stop)
         r = self.s.get(
-            self.url
-            + "/makeres.cgi?session="
-            + self.session
-            + "&object="
-            + self.OBJECT_ID
-            + "&start="
-            + str(self.date_to_timestamp(start))
-            + "&stop="
-            + str(self.date_to_timestamp(stop))
+            f"{self.url}/makeres.cgi?session={self.session}&object={self.OBJECT_ID}&start={start}&stop={stop}"
         )
         status, resp_valies = self.parse_response(r.text)
         if status != "0":
@@ -91,52 +74,3 @@ class EntroClient:
         return int(
             (date.replace(tzinfo=timezone.utc) - relativedelta(years=20)).timestamp()
         )
-
-    def _debug(self):
-        print("showres.cgi (my bookings)")
-        r = self.s.get(
-            self.url
-            + "/showres.cgi?session="
-            + self.session
-            + "&object="
-            + self.OBJECT_ID
-            + "&type=0"
-        )
-        print(r.text)
-
-        print("showres.cgi (all bookings)")
-        r = self.s.get(
-            self.url
-            + "/showres.cgi?session="
-            + self.session
-            + "&object="
-            + self.OBJECT_ID
-            + "&type=1"
-        )
-        print(r.text)
-
-        print("time.cgi")
-        r = self.s.get(
-            self.url + "/time.cgi?session=" + self.session + "&object=" + self.OBJECT_ID
-        )
-        print(r.text)
-
-        print("combo.cgi")
-        r = self.s.get(
-            self.url
-            + "/combo.cgi?session="
-            + self.session
-            + "&object="
-            + self.OBJECT_ID
-        )  # need start and stop dates
-        print(r.text)
-
-        print("resdata.cgi")
-        r = self.s.get(
-            self.url
-            + "/resdata.cgi?session="
-            + self.session
-            + "&object="
-            + self.OBJECT_ID
-        )  # need start and stop dates and size
-        print(r.text)
