@@ -32,4 +32,5 @@ client.make_booking(start, stop) # Pass datetimes for start and stop
 ```
 
 ## Notes
-I only have user level access to one (live) instance of this system, so there is probably quite a few configurations this library doesn't support.
+* Vanderbilt Entro is [end of life](https://www.mynewsdesk.com/se/vanderbilt/news/vanderbilt-lanserar-entro-trade-in-kampanj-tvaa-vaegar-vidare-409247).
+* I only have user level access to one (live) instance of this system, so there is probably quite a few configurations this library doesn't support.
