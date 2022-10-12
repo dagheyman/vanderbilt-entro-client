@@ -1,3 +1,5 @@
+![infopoint](infopoint.png)
+
 # vanderbilt-entro-client
 
 Library for managing bookings in Vanderbilt Entro Reservation system (earlier called Bewator Entro).
